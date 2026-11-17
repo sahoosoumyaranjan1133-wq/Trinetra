@@ -4,158 +4,527 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>NovaSearch - Explore the Web</title>
+
+        <title>Trinetra – See Beyond. Search Smarter.</title>
+
+        <meta name="description" content="Trinetra is an independent search engine. See beyond and search smarter.">
 
         <style>
             * {
                 box-sizing: border-box;
             }
 
-            body {
-                margin: 0;
-                min-height: 100vh;
-                font-family: Arial, sans-serif;
-                background: #f8fafc;
-                color: #172033;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                padding: 20px;
-                transition: 0.3s;
+            :root {
+                --bg: #f7f9ff;
+                --surface: #ffffff;
+                --text: #172033;
+                --muted: #718096;
+                --border: #e2e8f0;
+                --primary: #635bff;
+                --primary-hover: #5148e5;
+                --shadow: 0 15px 45px rgba(40, 50, 100, 0.09);
             }
 
             body.dark {
-                background: #111827;
-                color: white;
+                --bg: #0b1020;
+                --surface: #151d32;
+                --text: #f1f5f9;
+                --muted: #a0aec0;
+                --border: #2b3650;
+                --primary: #928bff;
+                --primary-hover: #aaa5ff;
+                --shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
             }
 
-            .theme {
+            body {
+                margin: 0;
+                min-height: 100vh;
+                font-family: Inter, Arial, sans-serif;
+                background:
+                    radial-gradient(circle at 50% 25%,
+                        rgba(99, 91, 255, 0.10), transparent 35%),
+                    var(--bg);
+                color: var(--text);
+                transition: background 0.3s, color 0.3s;
+            }
+
+            button,
+            input {
+                font: inherit;
+            }
+
+            .topbar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 22px 6%;
+            }
+
+            .brand {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                font-size: 21px;
+                font-weight: 800;
+                letter-spacing: -0.7px;
+            }
+
+            .logo {
+                width: 43px;
+                height: 43px;
+                border-radius: 14px;
+                background: linear-gradient(135deg, #7169ff, #3026bd);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 3px;
+                box-shadow: 0 6px 18px rgba(99, 91, 255, 0.3);
+            }
+
+            .eye {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: white;
+                position: relative;
+            }
+
+            .eye::after {
+                content: "";
                 position: absolute;
-                top: 20px;
-                right: 25px;
-                padding: 10px;
+                width: 3px;
+                height: 3px;
+                border-radius: 50%;
+                background: #3026bd;
+                top: 2.5px;
+                left: 2.5px;
+            }
+
+            .theme-btn {
+                border: 1px solid var(--border);
+                background: var(--surface);
+                color: var(--text);
+                padding: 10px 15px;
+                border-radius: 25px;
                 cursor: pointer;
+                transition: 0.2s;
+            }
+
+            .theme-btn:hover {
+                border-color: var(--primary);
+            }
+
+            .hero {
+                width: min(850px, 92%);
+                margin: 75px auto 0;
+                text-align: center;
+            }
+
+            .eyebrow {
+                display: inline-block;
+                padding: 8px 15px;
+                border: 1px solid var(--border);
+                border-radius: 30px;
+                background: var(--surface);
+                color: var(--primary);
+                font-size: 13px;
+                font-weight: 700;
+                letter-spacing: 0.5px;
             }
 
             h1 {
-                font-size: clamp(42px, 9vw, 65px);
-                margin-bottom: 10px;
-                letter-spacing: -3px;
+                margin: 24px 0 12px;
+                font-size: clamp(45px, 8vw, 76px);
+                letter-spacing: -4px;
+                line-height: 1.05;
             }
 
             h1 span {
-                color: #2563eb;
+                background: linear-gradient(110deg, #756cff, #3425c7);
+                background-clip: text;
+                -webkit-background-clip: text;
+                color: transparent;
             }
 
-            p {
-                color: #64748b;
+            .tagline {
+                color: var(--muted);
+                font-size: 17px;
+                line-height: 1.6;
+                margin-bottom: 35px;
             }
 
             .search-box {
                 display: flex;
-                width: min(600px, 100%);
-                border: 1px solid #cbd5e1;
-                border-radius: 40px;
-                padding: 8px 15px;
-                background: white;
-                margin-top: 25px;
+                align-items: center;
+                width: 100%;
+                padding: 8px 9px 8px 20px;
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 18px;
+                box-shadow: var(--shadow);
+                transition: 0.25s;
             }
 
-            .dark .search-box {
-                background: #1f2937;
-                border-color: #475569;
+            .search-box:focus-within {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 4px rgba(99, 91, 255, 0.12);
             }
 
-            input {
+            .search-icon {
+                font-size: 20px;
+                color: var(--muted);
+                margin-right: 12px;
+            }
+
+            #searchInput {
                 flex: 1;
                 min-width: 0;
                 border: none;
                 outline: none;
-                padding: 12px;
-                font-size: 16px;
                 background: transparent;
-                color: inherit;
+                color: var(--text);
+                font-size: 16px;
+                padding: 13px 0;
             }
 
-            button {
+            #searchInput::placeholder {
+                color: var(--muted);
+            }
+
+            .clear-btn {
+                display: none;
                 border: none;
-                border-radius: 25px;
-                padding: 12px 20px;
-                background: #2563eb;
-                color: white;
+                background: transparent;
+                color: var(--muted);
                 cursor: pointer;
+                padding: 8px;
+                font-size: 18px;
             }
 
-            button:hover {
-                background: #1d4ed8;
-            }
-
-            .options {
-                display: flex;
-                gap: 12px;
-                margin-top: 20px;
-            }
-
-            #results {
-                width: min(600px, 100%);
-                margin-top: 30px;
-                overflow-wrap: anywhere;
-            }
-
-            .result {
-                padding: 15px;
+            .search-btn {
+                border: none;
+                background: var(--primary);
+                color: white;
+                padding: 14px 25px;
                 border-radius: 12px;
-                background: white;
-                border: 1px solid #e2e8f0;
+                font-weight: 700;
+                cursor: pointer;
+                transition: 0.2s;
+            }
+
+            .search-btn:hover {
+                background: var(--primary-hover);
+                transform: translateY(-1px);
+            }
+
+            .search-btn:disabled {
+                opacity: 0.6;
+                cursor: wait;
+                transform: none;
+            }
+
+            .suggestions {
+                margin-top: 23px;
+                color: var(--muted);
+                font-size: 13px;
+            }
+
+            .suggestion-list {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 10px;
                 margin-top: 12px;
             }
 
-            .dark .result {
-                background: #1f2937;
-                border-color: #475569;
+            .suggestion {
+                border: 1px solid var(--border);
+                background: var(--surface);
+                color: var(--text);
+                border-radius: 25px;
+                padding: 9px 15px;
+                cursor: pointer;
+                font-size: 13px;
+                transition: 0.2s;
+            }
+
+            .suggestion:hover {
+                border-color: var(--primary);
+                color: var(--primary);
+                transform: translateY(-2px);
+            }
+
+            .features {
+                display: flex;
+                justify-content: center;
+                gap: 25px;
+                flex-wrap: wrap;
+                margin-top: 42px;
+                color: var(--muted);
+                font-size: 13px;
+            }
+
+            .features span {
+                display: flex;
+                align-items: center;
+                gap: 7px;
+            }
+
+            #results {
+                width: min(750px, 92%);
+                margin: 45px auto 60px;
+            }
+
+            .result-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 18px;
+                gap: 10px;
+            }
+
+            .result-header h2 {
+                font-size: 20px;
+                margin: 0;
+            }
+
+            .result-count {
+                color: var(--muted);
+                font-size: 13px;
+            }
+
+            .result {
+                padding: 19px;
+                border: 1px solid var(--border);
+                background: var(--surface);
+                border-radius: 15px;
+                margin-bottom: 13px;
+                transition: 0.2s;
+            }
+
+            .result:hover {
+                border-color: var(--primary);
+                transform: translateY(-2px);
+            }
+
+            .result h3 {
+                margin: 0 0 9px;
+                font-size: 17px;
+                color: var(--primary);
+            }
+
+            .result a {
+                color: var(--muted);
+                font-size: 13px;
+                overflow-wrap: anywhere;
+                text-decoration: none;
+            }
+
+            .result a:hover {
+                text-decoration: underline;
+            }
+
+            .empty-state {
+                text-align: center;
+                padding: 35px 15px;
+                border: 1px dashed var(--border);
+                border-radius: 15px;
+                color: var(--muted);
+                background: var(--surface);
+            }
+
+            .loader {
+                width: 23px;
+                height: 23px;
+                border: 3px solid var(--border);
+                border-top-color: var(--primary);
+                border-radius: 50%;
+                animation: spin 0.8s linear infinite;
+                margin: 0 auto 12px;
+            }
+
+            @keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            .ai-notice {
+                display: none;
+                margin: 20px auto 0;
+                padding: 14px;
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                color: var(--muted);
+                font-size: 13px;
+            }
+
+            footer {
+                text-align: center;
+                color: var(--muted);
+                font-size: 12px;
+                padding: 25px 15px;
+                border-top: 1px solid var(--border);
+                margin-top: 60px;
+            }
+
+            @media (max-width: 600px) {
+                .topbar {
+                    padding: 17px 5%;
+                }
+
+                .hero {
+                    margin-top: 65px;
+                }
+
+                h1 {
+                    letter-spacing: -2.5px;
+                }
+
+                .search-box {
+                    padding-left: 13px;
+                }
+
+                .search-btn {
+                    padding: 13px 16px;
+                }
+
+                .features {
+                    gap: 14px;
+                }
             }
         </style>
     </head>
 
     <body>
 
-        <button class="theme" onclick="toggleTheme()">
-            🌙 Theme
-        </button>
+        <header class="topbar">
+            <div class="brand">
+                <div class="logo" aria-label="Trinetra three-eye logo">
+                    <span class="eye"></span>
+                    <span class="eye"></span>
+                    <span class="eye"></span>
+                </div>
+                <span>Trinetra</span>
+            </div>
 
-        <h1>Nova<span>Search</span></h1>
+            <button class="theme-btn" onclick="toggleTheme()" id="themeButton">
+                🌙 Dark mode
+            </button>
+        </header>
 
-        <p>Explore the web. Understand more.</p>
+        <main>
+            <section class="hero">
 
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search anything..."
-                onkeydown="if(event.key==='Enter') searchWeb()">
+                <div class="eyebrow">
+                    ✦ THE THREE-EYED SEARCH EXPERIENCE
+                </div>
 
-            <button onclick="searchWeb()">Search</button>
-        </div>
+                <h1>See Beyond.<br><span>Search Smarter.</span></h1>
 
-        <div class="options">
-            <button onclick="searchWeb()">Web Search</button>
-            <button onclick="aiSearch()">AI Search</button>
-        </div>
+                <p class="tagline">
+                    Discover knowledge, explore ideas and find what matters.
+                    Welcome to Trinetra.
+                </p>
 
-        <div id="results"></div>
+                <form class="search-box" id="searchForm">
+                    <span class="search-icon">⌕</span>
+
+                    <input type="text" id="searchInput" placeholder="What are you looking for?" autocomplete="off"
+                        aria-label="Search Trinetra">
+
+                    <button type="button" class="clear-btn" id="clearButton" onclick="clearSearch()">
+                        ✕
+                    </button>
+
+                    <button type="submit" class="search-btn" id="searchButton">
+                        Search →
+                    </button>
+                </form>
+
+                <div class="suggestions">
+                    <span>Try searching:</span>
+
+                    <div class="suggestion-list">
+                        <button class="suggestion" onclick="setQuery('Java Programming')">
+                            Java Programming
+                        </button>
+
+                        <button class="suggestion" onclick="setQuery('Python')">
+                            Python
+                        </button>
+
+                        <button class="suggestion" onclick="setQuery('Spring Boot')">
+                            Spring Boot
+                        </button>
+
+                        <button class="suggestion" onclick="setQuery('Artificial Intelligence')">
+                            Artificial Intelligence
+                        </button>
+                    </div>
+                </div>
+
+                <div class="features">
+                    <span>🔍 Smart Search</span>
+                    <span>⚡ Fast Results</span>
+                    <span>🧠 AI Search — Coming Soon</span>
+                </div>
+
+                <div class="ai-notice" id="aiNotice">
+                    AI-powered search is planned for a future Trinetra update.
+                </div>
+
+            </section>
+
+            <section id="results" aria-live="polite"></section>
+        </main>
+
+        <footer>
+            <p>© 2026 Trinetra — The Three-Eyed One</p>
+            <p>See Beyond. Search Smarter.</p>
+        </footer>
 
         <script>
-            async function searchWeb() {
-                const query = document
-                    .getElementById("searchInput")
-                    .value.trim();
+            const searchInput = document.getElementById("searchInput");
+            const searchButton = document.getElementById("searchButton");
+            const results = document.getElementById("results");
+            const clearButton = document.getElementById("clearButton");
+            const searchForm = document.getElementById("searchForm");
+            const aiNotice = document.getElementById("aiNotice");
 
-                const results = document.getElementById("results");
+            searchForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                searchWeb();
+            });
+
+            searchInput.addEventListener("input", function () {
+                clearButton.style.display =
+                    searchInput.value ? "block" : "none";
+            });
+
+            async function searchWeb() {
+                const query = searchInput.value.trim();
+
+                aiNotice.style.display = "none";
 
                 if (!query) {
-                    results.textContent = "Please enter a search query.";
+                    results.innerHTML = `
+                    <div class="empty-state">
+                        Please enter something to search.
+                    </div>`;
+                    searchInput.focus();
                     return;
                 }
 
-                results.textContent = "Searching...";
+                searchButton.disabled = true;
+                searchButton.textContent = "Searching...";
+
+                results.innerHTML = `
+                <div class="empty-state">
+                    <div class="loader"></div>
+                    Searching Trinetra...
+                </div>`;
 
                 try {
                     const response = await fetch(
@@ -170,34 +539,131 @@
 
                     results.replaceChildren();
 
-                    const card = document.createElement("div");
-                    card.className = "result";
+                    const header = document.createElement("div");
+                    header.className = "result-header";
 
-                    const heading = document.createElement("h3");
-                    heading.textContent = data.query;
+                    const heading = document.createElement("h2");
+                    heading.textContent = `Results for "${data.query}"`;
 
-                    const message = document.createElement("p");
-                    message.textContent = data.message;
+                    const count = document.createElement("span");
+                    count.className = "result-count";
+                    count.textContent =
+                        `${data.totalResults ?? (data.results || []).length} results`;
 
-                    const status = document.createElement("p");
-                    status.textContent = "Status: " + data.status;
+                    header.append(heading, count);
+                    results.appendChild(header);
 
-                    card.append(heading, message, status);
-                    results.appendChild(card);
+                    const items = Array.isArray(data.results)
+                        ? data.results
+                        : [];
+
+                    if (items.length === 0) {
+                        const empty = document.createElement("div");
+                        empty.className = "empty-state";
+                        empty.textContent =
+                            "No results found. Try another search.";
+                        results.appendChild(empty);
+                        return;
+                    }
+
+                    items.forEach(item => {
+                        const card = document.createElement("article");
+                        card.className = "result";
+
+                        const heading = document.createElement("h3");
+                        const link = document.createElement("a");
+
+                        const value = String(item);
+                        const separator = value.indexOf(" | ");
+
+                        const title = separator >= 0
+                            ? value.substring(0, separator)
+                            : value;
+
+                        const url = separator >= 0
+                            ? value.substring(separator + 3)
+                            : "";
+
+                        heading.textContent = title;
+
+                        if (url) {
+                            try {
+                                const parsedUrl = new URL(url);
+
+                                if (["http:", "https:"].includes(parsedUrl.protocol)) {
+                                    link.href = parsedUrl.href;
+                                    link.target = "_blank";
+                                    link.rel = "noopener noreferrer";
+                                    link.textContent = url;
+                                    card.append(heading, link);
+                                } else {
+                                    card.appendChild(heading);
+                                }
+                            } catch {
+                                card.appendChild(heading);
+                            }
+                        } else {
+                            card.appendChild(heading);
+                        }
+
+                        results.appendChild(card);
+                    });
 
                 } catch (error) {
-                    results.textContent =
-                        "Unable to connect to NovaSearch backend.";
+                    results.innerHTML = `
+                    <div class="empty-state">
+                        Unable to connect to Trinetra backend.
+                        <br><br>
+                        Please check whether the Spring Boot server is running.
+                    </div>`;
+
+                    console.error("Trinetra search error:", error);
+
+                } finally {
+                    searchButton.disabled = false;
+                    searchButton.textContent = "Search →";
                 }
             }
 
-            function aiSearch() {
-                alert("AI Search will be added in a future phase!");
+            function setQuery(query) {
+                searchInput.value = query;
+                clearButton.style.display = "block";
+                searchWeb();
+            }
+
+            function clearSearch() {
+                searchInput.value = "";
+                clearButton.style.display = "none";
+                searchInput.focus();
+                results.replaceChildren();
             }
 
             function toggleTheme() {
                 document.body.classList.toggle("dark");
+
+                const isDark =
+                    document.body.classList.contains("dark");
+
+                localStorage.setItem("trinetra-theme",
+                    isDark ? "dark" : "light");
+
+                updateThemeButton();
             }
+
+            function updateThemeButton() {
+                const isDark =
+                    document.body.classList.contains("dark");
+
+                document.getElementById("themeButton").textContent =
+                    isDark ? "☀️ Light mode" : "🌙 Dark mode";
+            }
+
+            if (localStorage.getItem("trinetra-theme") === "dark") {
+                document.body.classList.add("dark");
+            }
+
+            updateThemeButton();
+
         </script>
 
     </body>
