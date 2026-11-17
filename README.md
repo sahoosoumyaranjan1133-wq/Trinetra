@@ -57,8 +57,8 @@ README.md
 ### Clone the repository
 
 ```bash
-git clone https://github.com/sahoosoumyaranjan1133-wq/NovaSearch.git
-cd NovaSearch
+git clone https://github.com/sahoosoumyaranjan1133-wq/Trinetra.git
+cd Trinetra
 ```
 
 ### Start the application
